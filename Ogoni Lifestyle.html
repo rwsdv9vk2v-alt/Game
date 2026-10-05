@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Ogoni Lifestyle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f5f7;--card:#fff;--tx:#1d1d1f;--mu:#6e6e73;--ac:#0a7a3d;--gd:#f2a900;--bd:#e3e3e8}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111;--card:#1c1c1e;--tx:#f5f5f7;--mu:#98989d;--bd:#2c2c2e}}
+:root[data-theme=dark]{--bg:#111;--card:#1c1c1e;--tx:#f5f5f7;--mu:#98989d;--bd:#2c2c2e}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px;margin:auto;min-height:100vh}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 12px;z-index:5;border-bottom:1px solid var(--bd)}
+.money{font-weight:800;font-size:22px;color:var(--ac)}.row{display:flex;gap:8px;align-items:center}
+.st{flex:1;font-size:11px;color:var(--mu)}.bar{height:7px;background:var(--bd);border-radius:9px;overflow:hidden;margin-top:2px}.bar i{display:block;height:100%;background:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin:12px}
+.scene{font-size:54px;text-align:center}h1,h2,h3{margin:4px 0}.mu{color:var(--mu);font-size:13px}
+button{font:inherit;border:0;border-radius:12px;padding:10px 12px;background:var(--ac);color:#fff;font-weight:600;cursor:pointer}
+button.alt{background:var(--bd);color:var(--tx)}button:disabled{opacity:.4}
+.acts{display:grid;gap:8px;margin-top:10px}.acts button{text-align:left;display:flex;justify-content:space-between;gap:8px}
+.nav{position:sticky;bottom:0;display:flex;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--bd)}
+.nav button{flex:1;background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.sheet{position:fixed;inset:0;background:#0008;display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet>div{background:var(--bg);width:100%;max-width:520px;max-height:80vh;overflow:auto;border-radius:20px 20px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.log{font-size:13px;color:var(--mu);padding:0 14px 12px;min-height:40px}
+input{font:inherit;width:100%;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);margin:6px 0}
+.hero{text-align:center;padding:40px 18px}.hero h1{font-size:38px}.hero h1 b{color:var(--ac)}
+.pick{display:flex;gap:10px;justify-content:center;margin:10px 0}.pick button{font-size:34px;background:var(--card);border:2px solid var(--bd)}.pick .on{border-color:var(--ac)}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),N=n=>"₦"+n.toLocaleString();
+const L={
+bori:{n:"Bori Market",e:"🛒",d:"The busy heart of Ogoniland. Yams, fish, pepper and gist everywhere.",a:[
+{t:"Sell yams for a trader",en:12,be:10,m:[600,1400],v:2},{t:"Carry load for customers",en:18,be:15,m:[1200,2400],v:0},{t:"Pepper soup & fish (₦1,500)",pay:1500,belle:45,en:-5,v:3}]},
+bodo:{n:"Bodo Creek",e:"🛶",d:"Canoes, nets and the smell of fresh periwinkle by the water.",a:[
+{t:"Fish with the canoe men",en:20,be:15,m:[1500,3000],v:2},{t:"Pick & sell periwinkle",en:14,be:10,m:[800,1700],v:1},{t:"Sit by the creek and relax",en:-25,be:5,m:[0,0],v:8}]},
+kpor:{n:"Kpor Junction",e:"🏍️",d:"Okada, keke and loud horns. Everybody is going somewhere.",a:[
+{t:"Ride okada for a shift",en:22,be:15,m:[2000,3800],v:-2},{t:"Sell recharge cards",en:10,be:8,m:[500,1100],v:1},{t:"Roadside suya (₦1,000)",pay:1000,belle:30,en:0,v:2}]},
+eleme:{n:"Eleme Junction",e:"⛽",d:"Filling stations, trucks and night-shift hustle.",a:[
+{t:"Pump attendant shift",en:20,be:15,m:[1800,3200],v:0},{t:"Wash trucks",en:16,be:12,m:[1000,2000],v:-1}]},
+tai:{n:"Tai Farm",e:"🌱",d:"Green cassava farms, palm trees and quiet evenings.",a:[
+{t:"Harvest cassava",en:22,be:18,m:[1600,3000],v:1},{t:"Tap palm wine with the elders",en:12,be:8,m:[700,1500],v:3},{t:"Rest under the palm tree",en:-30,be:5,m:[0,0],v:5}]},
+owambe:{n:"Owambe · Bori Town Hall",e:"🎉",d:"Live band, jollof, asoebi everywhere. Time to spray money!",a:[
+{t:"Jollof & chicken (₦2,000)",pay:2000,belle:55,en:0,v:6},{t:"Dance till your legs shake",en:15,be:8,m:[0,0],v:12}],spray:1}};
+const NPC=["Barinem","Nwibari","Tombari","Bariyaa","Legborsi","Naadu","Lekia","Deebom","Zorle","Kpobari","Baridi","Mene"];
+const LINES=["How market today? Customers dey rush!","Oga, the creek is calm this evening.","See that gele! Who sewed am?","Be careful for road, area boys dey collect toll.","Bori na our pride, I swear.","I dey save for big phone.","Fresh periwinkle dey, come buy!"];
+const ITEMS=[["😎","Shades",3000],["🧢","Cap",2000],["👑","Gele / Agbada",5000],["⛓️","Gold chain",12000],["📱","Big phone",20000]];
+const RICH=[["Naadu",184000],["Barinem",132000],["Legborsi",97000],["Zorle",64000]];
+let S,toast="";
+const save=()=>{try{localStorage.setItem("ol",JSON.stringify(S))}catch(e){}};
+try{S=JSON.parse(localStorage.getItem("ol")||"null")}catch(e){}
+const clamp=v=>Math.max(0,Math.min(100,v));
+const vibe=v=>v<25?"Low":v<55?"Okay":v<80?"Good":"Lit";
+function intro(g){return`<div class="hero"><div class="scene">🌴</div><h1><b>Ogoni</b> Lifestyle</h1><p class="mu">Ogoniland, your way. Hustle, ride, link up and spray money at the owambe.</p>
+<input id="nm" maxlength="14" placeholder="Your name"><div class="pick"><button class="${g==0?'on':''}" onclick="G=0;render()">👨🏾</button><button class="${g==1?'on':''}" onclick="G=1;render()">👩🏾</button></div>
+<button style="width:100%" onclick="start()">Play free</button><p class="mu">Ages 18+. Single-player demo: other people are NPCs.</p></div>`}
+let G=0,sheet="";
+function start(){const n=$("#nm").value.trim()||"Player";S={n,g:G,m:3000,b:80,e:100,v:50,loc:"bori",h:8,items:[],wear:[],spent:0,rest:0};save();render()}
+function top(){const bar=(l,v)=>`<div class="st">${l}<div class="bar"><i style="width:${v}%"></i></div></div>`;
+return`<div class="top"><div class="row"><div class="money">${N(S.m)}</div>${bar("Belle",S.b)}${bar("Energy",S.e)}<div class="st">Vibe<br><b style="color:var(--tx)">${vibe(S.v)}</b></div></div></div>`}
+function avatar(){return(S.g?"👩🏾":"👨🏾")+S.wear.map(i=>ITEMS[i][0]).join("")}
+function clock(){const h=S.h%24;return(h%12||12)+(h<12?"AM":"PM")}
+function render(){if(!S){$("#app").innerHTML=intro(G);return}
+const l=L[S.loc];
+$("#app").innerHTML=top()+`<div class="card"><div class="mu">${clock()} · Day ${1+Math.floor(S.h/24)}</div><div class="scene">${l.e}</div><h2 style="text-align:center">${l.n}</h2><p class="mu" style="text-align:center">${l.d}</p>
+<div class="acts">${l.a.map((a,i)=>`<button onclick="act(${i})"><span>${a.t}</span><span>${a.pay?"":a.en>0?"−"+a.en+" energy":"+"+(-a.en)+" energy"}</span></button>`).join("")}${l.spray?`<button style="background:var(--gd);color:#000" onclick="sheet='spray';render()">💸 Spray money</button>`:""}</div></div>
+<div class="log">${toast}</div>
+<div class="nav"><button onclick="sheet='map';render()">🗺️ Map</button><button onclick="sheet='ppl';render()">👥 People</button><button onclick="sheet='ward';render()">👕 Wardrobe</button><button onclick="sheet='phone';render()">📱 Phone</button></div>`+(sheet?`<div class="sheet" onclick="if(event.target==this){sheet='';render()}"><div>${sh()}</div></div>`:"")}
+function npcs(){const s=S.loc.length+Math.floor(S.h/3);return[0,1,2,3].map(i=>NPC[(s*3+i*5)%NPC.length])}
+function sh(){const x=`<div class="row" style="justify-content:space-between"><h3>`,c=`<button class="alt" onclick="sheet='';render()">✕</button></div>`;
+if(sheet=="map")return x+`Ogoniland</h3>${c}<p class="mu">Buses are cheap, but area boys sometimes block the road for "toll".</p>`+Object.keys(L).filter(k=>k!=S.loc).map(k=>`<div class="li"><span>${L[k].e} ${L[k].n}</span><button onclick="go('${k}')">Ride ${N(k=="owambe"?300:200+(k.length*40))}</button></div>`).join("");
+if(sheet=="ppl")return x+`People here</h3>${c}`+npcs().map(p=>`<div class="li"><span>🧍🏾 ${p} <span class="mu">NPC</span></span><button class="alt" onclick="chat('${p}')">Chat</button></div>`).join("")+`<h3 style="margin-top:14px">Tonight's big spenders</h3>`+[...RICH,[S.n+" (you)",S.spent]].sort((a,b)=>b[1]-a[1]).map((r,i)=>`<div class="li"><span>${i+1}. ${r[0]}</span><b>${N(r[1])}</b></div>`).join("");
+if(sheet=="spray")return x+`Spray money</h3>${c}<p class="mu">Every note leaves your pocket and lands in theirs.</p>`+npcs().map(p=>`<div class="li"><span>🧍🏾 ${p}</span><span><button onclick="spray(200)">₦200</button> <button onclick="spray(1000)">₦1,000</button></span></div>`).join("");
+if(sheet=="ward")return x+`Wardrobe</h3>${c}<div class="scene">${avatar()}</div>`+(S.items.length?S.items.map(i=>`<div class="li"><span>${ITEMS[i][0]} ${ITEMS[i][1]}</span><button class="alt" onclick="wear(${i})">${S.wear.includes(i)?"Take off":"Wear"}</button></div>`).join(""):`<p class="mu">Nothing yet. Buy shades, caps, gele, chains and big phones below.</p>`)+`<h3 style="margin-top:12px">Bori Boutique</h3>`+ITEMS.map((t,i)=>`<div class="li"><span>${t[0]} ${t[1]}</span><button ${S.items.includes(i)||S.m<t[2]?"disabled":""} onclick="buy(${i})">${N(t[2])}</button></div>`).join("");
+return x+`Phone</h3>${c}<div class="li"><span>Name</span><b>${S.n}</b></div><div class="li"><span>Total sprayed</span><b>${N(S.spent)}</b></div><div class="li"><span>Looks owned</span><b>${S.items.length}/5</b></div><p class="mu">Progress saves in this browser.</p><button class="alt" style="width:100%" onclick="if(confirm('Start over?')){S=null;try{localStorage.removeItem('ol')}catch(e){}sheet='';render()}">Start a new person</button>`}
+function adv(h){S.h+=h;S.b=clamp(S.b-h*2)}
+function act(i){const a=L[S.loc].a[i];
+if(a.pay){if(S.m<a.pay){toast="You no get enough money.";return render()}S.m-=a.pay;S.b=clamp(S.b+a.belle);S.e=clamp(S.e+(-a.en||0));S.v=clamp(S.v+a.v);adv(1);toast="Ahh, that was sweet. Belle full small.";save();return render()}
+if(a.en>0&&S.e<a.en){toast="You tired o. Rest first.";return render()}
+if(a.en>0&&S.b<a.be){toast="Belle dey pain you. Go eat something.";return render()}
+const g=R(a.m[0],a.m[1])+(S.wear.includes(4)?200:0);S.e=clamp(S.e-a.en);S.b=clamp(S.b-a.be);S.m+=g;S.v=clamp(S.v+a.v);adv(a.en<0?3:1);
+toast=g?`You made ${N(g)}.`:"You rest and feel better.";save();render()}
+function go(k){const f=200+(k.length*40)*(k=="owambe"?0:1)+(k=="owambe"?300:0);if(S.m<f){toast="Fare too much for you.";sheet="";return render()}
+S.m-=f;S.loc=k;adv(1);sheet="";save();
+if(Math.random()<.25){sheet="toll";const t=$("#app");render();t.insertAdjacentHTML("beforeend",`<div class="sheet"><div><h3>🚧 Roadblock</h3><p class="mu">Area boys block the road for "settlement".</p><button style="width:100%;margin-bottom:8px" onclick="toll(1)">Settle ₦300</button><button class="alt" style="width:100%" onclick="toll(0)">Skip › talk your way out</button></div></div>`);return}
+toast="You arrive at "+L[k].n+".";render()}
+function toll(p){sheet="";if(p){const c=Math.min(300,S.m);S.m-=c;toast="Settled "+N(c)+". Road open."}else if(Math.random()<.5){toast="Your gist worked. You pass free!";S.v=clamp(S.v+4)}else{S.v=clamp(S.v-8);S.m=Math.max(0,S.m-600);toast="They no gree. You paid ₦600 and lost vibe."}
+save();render()}
+function chat(p){toast=p+": "+LINES[R(0,LINES.length-1)];S.v=clamp(S.v+2);sheet="";save();render()}
+function spray(n){if(S.m<n){toast="Your pocket no reach.";sheet="";return render()}S.m-=n;S.spent+=n;S.v=clamp(S.v+(n>500?10:4));toast="💸 You sprayed "+N(n)+"! The hall go wild.";sheet="";save();render()}
+function buy(i){S.m-=ITEMS[i][2];S.items.push(i);S.wear.push(i);S.v=clamp(S.v+10);save();render()}
+function wear(i){S.wear=S.wear.includes(i)?S.wear.filter(x=>x!=i):[...S.wear,i];save();render()}
+render();
+</script></body></html>
